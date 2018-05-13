@@ -4,8 +4,29 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 	<struts>
 		<package name="crm" namespace="/" extends="struts-default">
+			<!-- 客户模块 -->
 			<action name="customer_*" class="customerAction" method="{1}">
-				<result name="success">/index.jsp</result>
+				<result name="addUI">/jsp/customer/add.jsp</result>
+				<result name="updateUI">/jsp/customer/edit.jsp</result>
+				<result name="update" type="redirectAction">customer_findByPage.action</result>
+				<result name="save" type="redirectAction">customer_findByPage.action</result>
+				<result name="page">/jsp/customer/list.jsp</result>
+				<result name="input">/jsp/error.jsp</result>
+				<result name="delete" type="redirectAction">customer_findByPage.action</result>
+			</action>
+			<!-- 字典模块 -->
+			<action name="dict_*" class="dictAction" method="{1}">
+			</action>
+			
+			<!-- 联系人模块 -->
+			<action name="linkman_*" class="linkmanAction" method="{1}">
+				<result name="saveUI">/jsp/linkman/add.jsp</result>
+				<result name="save" type="redirectAction">linkman_findByPage.action</result>
+				<result name="delete" type="redirectAction">linkman_findByPage.action</result>
+				<result name="updateUI">/jsp/linkman/edit.jsp</result>
+				<result name="update" type="redirectAction">linkman_findByPage.action</result>
+				<result name="page">/jsp/linkman/list.jsp</result>
+				
 			</action>
 		</package>
 	</struts>

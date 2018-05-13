@@ -7,16 +7,34 @@
 <TITLE>添加客户</TITLE> 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
-<LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
-	rel=stylesheet>
-
-
+<LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css rel=stylesheet>
+<script src="${pageContext.request.contextPath }/js/jquery-1.11.3.min.js" type="text/javascript"></script>
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
+
+<script type="text/javascript">
+	$(function(){
+		var url="${pageContext.request.contextPath}/dict_findByCode.action";
+		var params={"dict_type_code":"006"};
+		$.post(url,params,function(data){
+			$(data).each(function(){
+				$("#level").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+			});
+		},"json");
+		
+		var params={"dict_type_code":"002"};
+		$.post(url,params,function(data){
+			$(data).each(function(){
+				$("#source").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+			});
+		},"json");
+	});
+	
+	
+</script>
 </HEAD>
 <BODY>
 	<FORM id=form1 name=form1
-		action="${pageContext.request.contextPath }/customer_add.action"
-		method=post>
+		action="${pageContext.request.contextPath }/customer_save.action" method="post" enctype="multipart/form-data">
 		
 
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
@@ -57,8 +75,7 @@
 								</td>
 								<td>客户级别 ：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_level">
+								<select name="level.dict_id" id="level"></select>
 								</td>
 							</TR>
 							
@@ -66,8 +83,7 @@
 								
 								<td>信息来源 ：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_source">
+								<select name="source.dict_id" id="source"></select>
 								</td>
 								<td>联系人：</td>
 								<td>
@@ -97,10 +113,9 @@
 								<INPUT class=textbox id=sChannel2
 														style="WIDTH: 180px" maxLength=50 name="cust_address">
 								</td>
-								<td>邮政编码 ：</td>
+								<td>客户资质 ：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_zip">
+								<input type="file" name="upload"/>
 								</td>
 							</TR>
 							<TR>

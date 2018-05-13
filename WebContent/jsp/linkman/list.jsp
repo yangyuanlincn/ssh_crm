@@ -9,7 +9,7 @@
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
 <LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
 	rel=stylesheet>
-<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.11.3.min.js"></script>
 <SCRIPT language=javascript>
 	function to_page(page){
 		if(page){
@@ -24,7 +24,7 @@
 </HEAD>
 <BODY>
 	<FORM id="customerForm" name="customerForm"
-		action="${pageContext.request.contextPath }/linkmanServlet?method=list"
+		action="${pageContext.request.contextPath }/linkman_findByPage"
 		method=post>
 		
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
@@ -62,8 +62,7 @@
 											<TBODY>
 												<TR>
 													<TD>联系人名称：</TD>
-													<TD><INPUT class=textbox id=sChannel2
-														style="WIDTH: 80px" maxLength=50 name="lkmName"></TD>
+													<TD><INPUT  value="${model.lkm_name }"class=textbox id=sChannel2 style="WIDTH: 80px" maxLength=50 name="lkm_name"></TD>
 													
 													<TD><INPUT class=button id=sButton2 type=submit
 														value=" 筛选 " name=sButton2></TD>
@@ -87,18 +86,18 @@
 													<TD>手机</TD>
 													<TD>操作</TD>
 												</TR>
-												<c:forEach items="${list }" var="linkman">
+												<c:forEach items="${page.list }" var="linkman">
 												<TR
 													style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">
-													<TD>${linkman.lkmName }</TD>
-													<TD>${linkman.lkmGender }</TD>
-													<TD>${linkman.lkmPhone }</TD>
-													<TD>${linkman.lkmMobile }</TD>
+													<TD>${linkman.lkm_name }</TD>
+													<TD>${linkman.lkm_gender }</TD>
+													<TD>${linkman.lkm_phone }</TD>
+													<TD>${linkman.lkm_mobile }</TD>
 													
 													<TD>
-													<a href="${pageContext.request.contextPath }/linkmanServlet?method=edit&lkmId=${linkman.lkmId}">修改</a>
+													<a href="${pageContext.request.contextPath }/linkman_updateUI.action?lkm_id=${linkman.lkm_id}">修改</a>
 													&nbsp;&nbsp;
-													<a href="${pageContext.request.contextPath }/linkmanServlet?method=delete&lkmId=${linkman.lkmId}">删除</a>
+													<a href="${pageContext.request.contextPath }/linkman_delete?lkm_id=${linkman.lkm_id}" onclick="return window.confirm('你确定要删除吗？')">删除</a>
 													</TD>
 												</TR>
 												
@@ -113,19 +112,22 @@
 									<TD><SPAN id=pagelink>
 											<DIV
 												style="LINE-HEIGHT: 20px; HEIGHT: 20px; TEXT-ALIGN: right">
-												共[<B>${total}</B>]条记录,[<B>${totalPage}</B>]页
+												共[<B>${page.totalCount}</B>]条记录,[<B>${page.totalPage}</B>]页
 												,每页显示
 												<select name="pageSize">
 												
-												<option value="1" <c:if test="${pageSize==1 }">selected</c:if>>1</option>
-												<option value="30" <c:if test="${pageSize==30 }">selected</c:if>>30</option>
+												<option value="2" <c:if test="${page.pageSize==2 }">selected</c:if>>2</option>
+												<option value="4" <c:if test="${page.pageSize==4 }">selected</c:if>>4</option>
+												<option value="6" <c:if test="${page.pageSize==6 }">selected</c:if>>6</option>
+												<option value="8" <c:if test="${page.pageSize==8 }">selected</c:if>>8</option>
+												<option value="10" <c:if test="${page.pageSize==10 }">selected</c:if>>10</option>
 												</select>
 												条
-												[<A href="javascript:to_page(${page-1})">前一页</A>]
-												<B>${page}</B>
-												[<A href="javascript:to_page(${page+1})">后一页</A>] 
+												[<A href="javascript:to_page(${page.currPage-1})">前一页</A>]
+												<B>${page.currPage}</B>
+												[<A href="javascript:to_page(${page.currPage+1})">后一页</A>] 
 												到
-												<input type="text" size="3" id="page" name="page" />
+												<input type="text" size="3" id="page" name="currPage" />
 												页
 												
 												<input type="button" value="Go" onclick="to_page()"/>

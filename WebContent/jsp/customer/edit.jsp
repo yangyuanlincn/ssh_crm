@@ -7,17 +7,46 @@
 <TITLE>添加客户</TITLE> 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
-<LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
-	rel=stylesheet>
-
-
+<LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css rel=stylesheet>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.11.3.min.js"></script>
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
+
+<script type="text/javascript">
+	$(function(){
+		var url="${pageContext.request.contextPath}/dict_findByCode.action";
+		var sourceId="${model.source.dict_id}";
+		var levelId="${model.level.dict_id}"
+		
+		var params={"dict_type_code":"006"};
+		$.post(url,params,function(data){
+			$(data).each(function(){
+				if(levelId==this.dict_id){
+					$("#level").append($("<option value='"+this.dict_id+"' selected>"+this.dict_item_name+"</option>"));
+				}else{
+					$("#level").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+				}
+				
+			});
+		},"json");
+		
+		var params={"dict_type_code":"002"};
+		$.post(url,params,function(data){
+			$(data).each(function(){
+				if(sourceId==this.dict_id){
+					$("#source").append($("<option value='"+this.dict_id+"' selected>"+this.dict_item_name+"</option>"));
+				}else{
+					$("#source").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+				}
+			});
+		},"json");
+	});
+</script>
 </HEAD>
 <BODY>
 	<FORM id=form1 name=form1
-		action="${pageContext.request.contextPath }/customerServlet?method=editsubmit"
-		method=post>
-		<input type="hidden" name="custId" value="${customer.custId }"/>
+		action="${pageContext.request.contextPath }/customer_update.action" method="post">
+		<input type="hidden" name="cust_id" value="${model.cust_id }"/>
+		<input type="hidden" name="filepath" value="${model.filepath }"/>
 
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
 			<TBODY>
@@ -50,25 +79,25 @@
 								<td>客户名称：</td>
 								<td>
 								<INPUT class=textbox id=sChannel2
-											style="WIDTH: 180px" maxLength=50 name="custName" value="${customer.custName }">
+											style="WIDTH: 180px" maxLength=50 name="cust_name" value="${model.cust_name }">
 								</td>
 								<td>客户级别 ：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custLevel" value="${customer.custLevel }">
+								<select name="level.dict_id" id="level">
+								
+								</select>
 								</td>
 							</TR>
 							
 							<TR>
 								<td>信息来源：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custSource" value="${customer.custSource }">
+								<select name="source.dict_id" id="source"></select>
 								</td>
 								<td>联系人：</td>
 								<td>
 								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custLinkman" value="${customer.custLinkman }">
+														style="WIDTH: 180px" maxLength=50 name="cust_linkman" value="${model.cust_linkman }">
 								</td>
 							</TR>
 							<TR>
@@ -77,12 +106,12 @@
 								<td>固定电话 ：</td>
 								<td>
 								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custPhone" value="${customer.custPhone }">
+														style="WIDTH: 180px" maxLength=50 name="cust_phone" value="${model.cust_phone }">
 								</td>
 								<td>移动电话 ：</td>
 								<td>
 								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custMobile" value="${customer.custMobile }">
+														style="WIDTH: 180px" maxLength=50 name="cust_mobile" value="${model.cust_mobile }">
 								</td>
 							</TR>
 							
@@ -92,10 +121,9 @@
 								<INPUT class=textbox id=sChannel2
 														style="WIDTH: 180px" maxLength=50 name="custAddress" value="${customerDetail.custAddress }">
 								</td>
-								<td>邮政编码 ：</td>
+								<td>客户资质：</td>
 								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="custZip" value="${customerDetail.custZip }">
+								<input type="file" name="upload"/>
 								</td>
 							</TR>
 							<TR>

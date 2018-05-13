@@ -1,18 +1,61 @@
 package com.linn.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class Customer {
 	
 	private Long cust_id;
 	private String cust_name;
 	private Long cust_user_id;
 	private Long cust_create_id;
-	private String cust_source;
-	private String cust_industry;
-	private String cust_level;
+//	private String cust_source;
+//	private String cust_industry;
+//	private String cust_level;
 	private String cust_linkman;
 	private String cust_phone;
 	private String cust_mobile;
+	private String filepath;
+	private Dict source;//客户来源
+	private Dict level;//客户级别
 	
+	@JSONField(serialize=false)
+	private Set<Linkman> linkmans=new HashSet<Linkman>();
+	
+	public Set<Linkman> getLinkmans() {
+		return linkmans;
+	}
+	public void setLinkmans(Set<Linkman> linkmans) {
+		this.linkmans = linkmans;
+	}
+	public Dict getSource() {
+		return source;
+	}
+	public void setSource(Dict source) {
+		this.source = source;
+	}
+	public Dict getLevel() {
+		return level;
+	}
+	public void setLevel(Dict level) {
+		this.level = level;
+	}
+	public Dict getIndustry() {
+		return industry;
+	}
+	public void setIndustry(Dict industry) {
+		this.industry = industry;
+	}
+	private Dict industry;//客户行业
+	
+	public String getFilepath() {
+		return filepath;
+	}
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
 	public Long getCust_id() {
 		return cust_id;
 	}
@@ -37,24 +80,7 @@ public class Customer {
 	public void setCust_create_id(Long cust_create_id) {
 		this.cust_create_id = cust_create_id;
 	}
-	public String getCust_source() {
-		return cust_source;
-	}
-	public void setCust_source(String cust_source) {
-		this.cust_source = cust_source;
-	}
-	public String getCust_industry() {
-		return cust_industry;
-	}
-	public void setCust_industry(String cust_industry) {
-		this.cust_industry = cust_industry;
-	}
-	public String getCust_level() {
-		return cust_level;
-	}
-	public void setCust_level(String cust_level) {
-		this.cust_level = cust_level;
-	}
+	
 	public String getCust_linkman() {
 		return cust_linkman;
 	}

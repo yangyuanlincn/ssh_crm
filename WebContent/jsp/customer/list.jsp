@@ -9,7 +9,7 @@
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
 <LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
 	rel=stylesheet>
-<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.11.3.min.js"></script>
 <SCRIPT language=javascript>
 	function to_page(page){
 		if(page){
@@ -18,14 +18,44 @@
 		document.customerForm.submit();
 		
 	}
+	
+	$(function(){
+		var url="${pageContext.request.contextPath}/dict_findByCode.action";
+		var params={"dict_type_code":"006"};
+		var vsId="${model.level.dict_id}";
+		$.post(url,params,function(data){
+			$(data).each(function(){
+				if(this.dict_id==vsId){
+					$("#level").append($("<option value='"+this.dict_id+"' selected>"+this.dict_item_name+"</option>"));
+				}else{
+					$("#level").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+				}
+				
+			});
+		},"json");
+		
+		
+		var param = {"dict_type_code":"002"};
+		$.post(url,param,function(data){
+			$(data).each(function(){
+				var vsId = "${model.source.dict_id}";
+				if(vsId == this.dict_id){
+					$("#source").append($("<option value='"+this.dict_id+"' selected>"+this.dict_item_name+"</option>"));
+				}else{
+					$("#source").append($("<option value='"+this.dict_id+"'>"+this.dict_item_name+"</option>"));
+				}
+			});
+		},"json");
+	});
+	
 </SCRIPT>
 
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
 </HEAD>
 <BODY>
 	<FORM id="customerForm" name="customerForm"
-		action="${pageContext.request.contextPath }/customerServlet?method=list"
-		method=post>
+		action="${pageContext.request.contextPath }/customer_findByPage.action"
+		method="post">
 		
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
 			<TBODY>
@@ -63,10 +93,20 @@
 												<TR>
 													<TD>客户名称：</TD>
 													<TD><INPUT class=textbox id=sChannel2
-														style="WIDTH: 80px" maxLength=50 name="custName"></TD>
-													
-													<TD><INPUT class=button id=sButton2 type=submit
-														value=" 筛选 " name=sButton2></TD>
+														style="WIDTH: 80px" maxLength=50 name="cust_name" value="${model.cust_name }"></TD>
+													<TD>客户来源：</TD>
+													<td>
+														<select name="source.dict_id" id="source">
+															<option value="">--请选择--</option>
+														</select>
+													</td>
+													<TD>客户级别：</TD>
+													<td>
+														<select name="level.dict_id" id="level">
+															<option value="">--请选择--</option>
+														</select>
+													</td>
+													<TD><INPUT class=button id=sButton2 type="submit" value="筛选 "></TD>
 												</TR>
 											</TBODY>
 										</TABLE>
@@ -89,19 +129,19 @@
 													<TD>手机</TD>
 													<TD>操作</TD>
 												</TR>
-												<c:forEach items="${list }" var="customer">
+												<c:forEach items="${page.list }" var="customer">
 												<TR
 													style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">
-													<TD>${customer.custName }</TD>
-													<TD>${customer.custLevel }</TD>
-													<TD>${customer.custSource }</TD>
-													<TD>${customer.custLinkman }</TD>
-													<TD>${customer.custPhone }</TD>
-													<TD>${customer.custMobile }</TD>
+													<TD>${customer.cust_name }</TD>
+													<TD>${customer.level.dict_item_name }</TD>
+													<TD>${customer.source.dict_item_name }</TD>
+													<TD>${customer.cust_linkman }</TD>
+													<TD>${customer.cust_phone }</TD>
+													<TD>${customer.cust_mobile }</TD>
 													<TD>
-													<a href="${pageContext.request.contextPath }/customerServlet?method=edit&custId=${customer.custId}">修改</a>
+													<a href="${pageContext.request.contextPath }/customer_updateUI.action?cust_id=${customer.cust_id}">修改</a>
 													&nbsp;&nbsp;
-													<a href="${pageContext.request.contextPath }/customerServlet?method=delete&custId=${customer.custId}">删除</a>
+													<a href="${pageContext.request.contextPath }/customer_delete.action?cust_id=${customer.cust_id}" onclick="return window.confirm('你确定要删除吗？')">删除</a>
 													</TD>
 												</TR>
 												
@@ -116,19 +156,22 @@
 									<TD><SPAN id=pagelink>
 											<DIV
 												style="LINE-HEIGHT: 20px; HEIGHT: 20px; TEXT-ALIGN: right">
-												共[<B>${total}</B>]条记录,[<B>${totalPage}</B>]页
+												共[<B>${page.totalCount}</B>]条记录,[<B>${page.totalPage}</B>]页
 												,每页显示
 												<select name="pageSize">
 												
-												<option value="15" <c:if test="${pageSize==1 }">selected</c:if>>1</option>
-												<option value="30" <c:if test="${pageSize==30 }">selected</c:if>>30</option>
+												<option value="2" <c:if test="${pageSize==2 }">selected</c:if>>2</option>
+												<option value="4" <c:if test="${pageSize==4 }">selected</c:if>>4</option>
+												<option value="6" <c:if test="${pageSize==6 }">selected</c:if>>6</option>
+												<option value="8" <c:if test="${pageSize==8 }">selected</c:if>>8</option>
+												<option value="10" <c:if test="${pageSize==10 }">selected</c:if>>10</option>
 												</select>
 												条
-												[<A href="javascript:to_page(${page-1})">前一页</A>]
-												<B>${page}</B>
-												[<A href="javascript:to_page(${page+1})">后一页</A>] 
+												[<A href="javascript:to_page(${page.currPage-1})">前一页</A>]
+												<B>${page.currPage}</B>
+												[<A href="javascript:to_page(${page.currPage+1})">后一页</A>] 
 												到
-												<input type="text" size="3" id="page" name="page" />
+												<input type="text" size="3" id="page" name="currPage" />
 												页
 												
 												<input type="button" value="Go" onclick="to_page()"/>

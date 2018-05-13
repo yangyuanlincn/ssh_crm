@@ -39,6 +39,8 @@
 		<property name="mappingResources">
 			<list>
 				<value>com/linn/domain/Customer.hbm.xml</value>
+				<value>com/linn/domain/Dict.hbm.xml</value>
+				<value>com/linn/domain/Linkman.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -63,6 +65,29 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
+	<!-- 字典模块 -->
+	<bean id="dictAction" class="com.linn.web.action.DictAction" scope="prototype">
+		<property name="dictService" ref="dictService"/>
+	</bean>
+	<bean id="dictService" class="com.linn.service.DictServiceImpl" >
+		<property name="dictDao" ref="dictDao"/>
+	</bean>
+	<bean id="dictDao" class="com.linn.dao.DictDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 联系人模块 -->
+	<bean id="linkmanDao" class="com.linn.dao.LinkmanDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="linkmanService" class="com.linn.service.LinkmanServiceImpl">
+		<property name="linkmanDao" ref="linkmanDao"/>
+	</bean>
+	
+	<bean id="linkmanAction" class="com.linn.web.action.LinkmanAction">
+		<property name="linkmanService" ref="linkmanService"/>
+	</bean>
 </beans>
 
 

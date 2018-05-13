@@ -130,11 +130,11 @@ A.active {
 											cellPadding=2 width=155 align=center border=0>
 											<TBODY>
 												<TR>
-													<TD class=menuSmall><A class=style2 href="${pageContext.request.contextPath }/jsp/customer/add.jsp" 
+													<TD class=menuSmall><A class=style2 href="${pageContext.request.contextPath }/customer_addUI" 
 														target=main>－ 新增客户</A></TD>
 												</TR>
 												<TR> 
-													<TD class=menuSmall><A class=style2 href="customerServlet?method=list"
+													<TD class=menuSmall><A class=style2 href="${pageContext.request.contextPath }/customer_findByPage"
 														target=main>－ 客户列表</A></TD>
 												</TR>
 												
@@ -155,12 +155,12 @@ A.active {
 											cellPadding=2 width=155 align=center border=0>
 											<TBODY>
 												<TR>
-													<TD class=menuSmall><A class=style2 href="linkmanServlet?method=add"
+													<TD class=menuSmall><A class=style2 href="${pageContext.request.contextPath }/linkman_saveUI"
 														target=main>－ 新增联系人</A></TD>
 												</TR>
 												<TR>
-													<TD class=menuSmall><A class=style2 href="linkmanServlet?method=list"
-														target=main>－联系人列表</A></TD>
+													<TD class=menuSmall><A class=style2 href="${pageContext.request.contextPath }/linkman_findByPage"
+														target=main>－ 联系人列表</A></TD>
 												</TR>
 												
 											</TBODY>
